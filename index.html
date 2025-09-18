@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blokhut5 of AI?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .animate-fade-in-out {
+            animation: fade-in-out 2s forwards;
+        }
+        @keyframes fade-in-out {
+            0% { opacity: 0; transform: translateY(10px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(10px); }
+        }
+        .message-card {
+            background-color: #28A745;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            max-width: 32rem;
+            width: 100%;
+        }
+        .button-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-blue-900 text-white min-h-screen flex items-center justify-center p-6">
+
+    <div id="app" class="flex flex-col items-center justify-center w-full"></div>
+
+    <script>
+        // Dataset of messages
+        const blokhut5Messages = [
+            { text: "Broer, wanneer ik rijk ben krijg jij zo’n hard gouden standbeeld van mijn 🍆", author: "Abas", date: "13-10-2024" },
+            { text: "Het is nu mijn beurt om sus te zijn met de wordle", author: "Olivier", date: "31-10-2024" },
+            { text: "Ik mis nu al de tijd van Rutte alsof het het Nederlands elftal is van Cruijff", author: "Abas", date: "23-11-2023" },
+            { text: "het beste idee wat ik daar tot nu toe voor heb gehoort is dempers toevoegen op die prullenbakjes in de trein", author: "Bram", date: "18-01-2024" },
+            { text: "Daarom heb ik altijd zo'n erge krampen", author: "Olivier", date: "24-01-2024" },
+            { text: "Enige wat ik kan vinden is een ikea bank", author: "Luc", date: "26-01-2024" },
+            { text: "Elk keer zijn die atleten elkaar allemaal aan het neuken toch", author: "Olivier", date: "06-02-2024" },
+            { text: "#Pray4Ollie", author: "Abas", date: "15-02-2024" },
+            { text: "Broer ik word gek van werkloos zijn", author: "Abas", date: "15-02-2024" },
+            { text: "Er was een splitsecond dat ik nadacht om een speedcursus zorg niveau 3 te doen zodat ik een studio kan krijgen bij een nieuw tehuis waar ik dan ook zou moeten werken", author: "Abas", date: "15-02-2024" },
+            { text: "Die vooral verkopen aan shady arabische shell companies zodat ze allemaal in terroristen handen komen", author: "Olivier", date: "21-02-2024" },
+            { text: "Wageningen is trouwens ook mooi", author: "Bram", date: "07-03-2024" },
+            { text: "Delft is best lelijk", author: "Bram", date: "07-03-2024" },
+            { text: "Als je familie lid stervende is kan die zich toch ziek in de schulden werken en allemaal leuke dingen en spullen voor je kopen", author: "Mark", date: "18-03-2024" },
+            { text: "Zou een beetje lullig zijn als je vader de melk is gaan halen en 60 jaar later krijg je zijn schulden", author: "Rick", date: "18-03-2024" },
+            { text: "Maar een 3d scan van je pielemuis naar meisjes sturen is wel next level", author: "Olivier", date: "29-03-2024" },
+            { text: "Hoe heet stof dat zich in het puntje van je broekzak verzamelt?", author: "Rick", date: "24-04-2024" },
+            { text: "Hier heb je een sinaasappel", author: "Bram", date: "03-05-2024" },
+            { text: "Dit is wel bijzonder. De kans dat je namelijk een relatie overhoudt uit first dates is maar 0,68%.", author: "Rick", date: "09-05-2024" },
+            { text: "Jan Smit heeft wel tactisch gekozen om te stoppen hoor", author: "Abas", date: "11-05-2024" },
+            { text: "Transformers was toch slang voor transgenders?", author: "Abas", date: "22-05-2024" },
+            { text: "Ppv heeft ook gewonnen in Schagen dus ik moet daar blijkt prolly ook bovengemiddeld zijn denk", author: "Kasper", date: "24-05-2024" },
+            { text: "Ah, je zou maar per ongeluk een minuutje niet een vmbo'er uithangen", author: "Kasper", date: "24-05-2024" },
+            { text: "Blijkbaar heb ik niet een goed genoeg ruimtelijk inzicht om te begrijpen hoe ver 5000km is...", author: "Abas", date: "25-05-2024" },
+            { text: "Keep my schools name out of your mouth", author: "Mark", date: "03-06-2024" },
+            { text: "Een nep Hitler snor en met een Duits accent", author: "Olivier", date: "03-06-2024" },
+            { text: "Ik heb meer random resultaten dan een lavalamp kan bedenken", author: "Abas", date: "03-06-2024" },
+            { text: "Deze wordle G mist de skills niet, hij mist de grind-mentality", author: "Abas", date: "16-11-2024" },
+            { text: "Kim Jong-un achtige interesse!", author: "Abas", date: "21-11-2024" },
+            { text: "Broer het hele leven is hetzelfde rondje", author: "Abas", date: "27-11-2024" },
+            { text: "Welke jongens durven vanavond aan de grote tafel te zitten?", author: "Michael", date: "05-12-2024" },
+            { text: "Zolang het bij monopoly money blijft, blijft michael financieel gezond", author: "Rick", date: "05-12-2024" },
+            { text: "Vandaag worden de mannen van de jongens onderscheiden", author: "Abas", date: "08-12-2024" },
+            { text: "Nvm dan is het gewoon skill issue", author: "Abas", date: "13-12-2024" },
+            { text: "Heb wel fillers gedaan omdat ik zag dat jij het niet haalde", author: "Olivier", date: "13-12-2024" },
+            { text: "Dus eigenlijk ben ik een soort Jezus?", author: "Abas", date: "13-12-2024" },
+            { text: "Voor de locals: gratis chocolade taarten in Jumbo Ouderkerk", author: "Abas", date: "21-12-2024" },
+            { text: "Alleen een beetje jammer dat die engineeringspolymeren nogal duur zijn, en echt water opnemen als een spons", author: "Bram", date: "21-12-2024" },
+            { text: "Maar gaat over kijken naar lampjes", author: "Michael", date: "31-12-2024" },
+            { text: "Het voelt alsof jullie op een Wordle rampage zitten", author: "Abas", date: "03-01-2025" },
+            { text: "Abas simpt gwn voor AI", author: "Rick", date: "17-01-2025" },
+            { text: "Is dit een advertentie? Ben jij gesponsord?", author: "Kris", date: "19-01-2025" },
+            { text: "Hier is 0 AI aan tepas gekomen", author: "Abas", date: "19-01-2025" },
+            { text: "Is vis cum ook viscous", author: "Olivier", date: "21-01-2025" },
+            { text: "Kan ik denk ik mn hele studie van betalen zovaak als de ns niet rijdt of vertraagd is.", author: "Luc", date: "26-01-2025" },
+            { text: "Beheers jij maar de Nederlandse taal terwijl je ouders niet white ass lieverds zijn", author: "Abas", date: "09-02-2025" },
+            { text: "Ik weet niet hoe hij denkt dat blank opgroeien werkt, maar mn ouders schrijven zeer zelden iets naar me", author: "Olivier", date: "09-02-2025" },
+            { text: "Bomaanslag op nyt headquarters 🗣", author: "Olivier", date: "14-02-2025" },
+            { text: "Dit soort acties laten me onveilig voelen hier", author: "Abas", date: "21-02-2025" },
+            { text: "Ik switch tussen crane of iets randoms", author: "Olivier", date: "21-02-2025" },
+            { text: "Dyslexie is mijn superkracht", author: "Michael", date: "01-03-2025" },
+            { text: "Blij dat de Amerikanen zoveel geven over je bloeddruk", author: "Kasper", date: "11-04-2025" },
+            { text: "80% kans dat je mijn ontblote bovenlichaam ziet als je mij gaat volgen", author: "Abas", date: "16-04-2025" },
+            { text: "Iedereen vindt zijn passie in zaandam", author: "Mark", date: "24-05-2025" },
+            { text: "Een echte DIYer doet het met decoupeerzaag maar laser is ook priem", author: "Michael", date: "03-06-2025" },
+            { text: "Omleggen heeft ook een beetje drama nodig", author: "Olivier", date: "04-07-2025" },
+            { text: "Goddamn, pedofilie steekpartijen en verkrachting, Schagen is idd niet goed in 't nieuws telkens", author: "Kasper", date: "10-07-2025" },
+            { text: "Ik zeg altijd schagoe, maar dat is vgm niet een publiekelijk iets", author: "Kasper", date: "18-07-2025" },
+            { text: "Fakka met die colloqium uitnodigingen?", author: "Abas", date: "13-08-2025" },
+            { text: "Ik wil niet stoken ofzo, maar wanneer komt de nieuwe The Purge uit?", author: "Abas", date: "18-08-2025" },
+            { text: "Wat zijn al die memes waarbij een nieuwe leider via discord werd gekozen en gen-z revolutie enzo!", author: "Abas", date: "14-09-2025" },
+            { text: "Je had bijna abas z'n nieuwe correspondent kunnen zijn, dodged a bullet", author: "Kasper", date: "15-09-2025" },
+            { text: "Er staat toch duidelijk Knaker sorry verkeerde groep", author: "Olivier", date: "15-09-2025" },
+            { text: "Noord Holland is ongeveer net zo mooi als kots", author: "Kasper", date: "15-09-2025" },
+            { text: "Nou we weten nog niet waar de tierlist over gaat, kan netzogoed een ranking zijn van de meest gestoorde dorpsgekken per provincie", author: "Abas", date: "15-09-2025" },
+            { text: "Van de vlaggen die ik daar zie zou fryslænd wel echt de enige flag zijn die mee zou kunne doen op het wereldtoneel", author: "Abas", date: "15-09-2025" },
+            { text: "Ben nog steeds groot fan van Overijssel, maar na een nachtje erover te hebben geslapen staat Flevoland toch wel bovenaan", author: "Michael", date: "16-09-2025" },
+            { text: "2 viezerikken die ff naar Thailand verhuizen🤣", author: "Kasper", date: "16-09-2025" }
+        ];
+
+        const aiMessages = [
+            { text: "Ze moeten stoppen met die luide piepjes van die OV-poortjes.", author: "AI" },
+            { text: "Als je je auto total loss rijdt, is het toch logisch dat je je schulden moet betalen?", author: "AI" },
+            { text: "In Schagen is er zó veel te doen, maar ik ben er net geweest en er is niks veranderd.", author: "AI" },
+            { text: "Dat is geen revolutionaire gedachte. Dat is gewoon een Wordle-oplossing.", author: "AI" },
+            { text: "De Nederlandse taal is voor mij net zo moeilijk als een Wordle.", author: "AI" },
+            { text: "Wie van jullie jongens durft het aan om een marathon te lopen met alleen maar een tas vol frikandellenbroodjes?", author: "AI" },
+            { text: "Is het raar dat ik liever op de bank lig dan dat ik naar buiten ga en een mens ben?", author: "AI" },
+            { text: "Dit soort acties laten me onveilig voelen hier.", author: "AI" },
+            { text: "Ik ben zo broke, ik kan niet eens de aandacht van mijn ouders betalen.", author: "AI" },
+            { text: "Mijn bankrekening is zo leeg dat hij spookt.", author: "AI" },
+            { text: "Is het raar dat ik hoop dat de NS-vertragingen opzettelijk zijn?", author: "AI" },
+            { text: "Iemand anders die het gevoel heeft dat hun brein permanent in de slaapstand staat?", author: "AI" },
+            { text: "De kans dat ik een vriendin krijg is lager dan de kans dat ik een Wordle in één keer goed heb.", author: "AI" },
+            { text: "Deze Wordle is lowkey een existentiële crisis in één woord.", author: "AI" },
+            { text: "Is ‘sober zijn’ niet gewoon een slechte cosplay van volwassenheid?", author: "AI" },
+            { text: "Wie de fuck kiest vrijwillig voor een date in Almere?", author: "AI" },
+            { text: "Het Vondelpark is gewoon Tinder IRL.", author: "AI" },
+            { text: "Amsterdam-Noord is basically Minecraft creative mode.", author: "AI" },
+            { text: "Zaandam is gwn een slechte DLC van Amsterdam.", author: "AI" },
+            { text: "In Leiden hebben ze meer bierkelders dan toekomstperspectief.", author: "AI" },
+            { text: "Bro, Amersfoort is een NPC-stad.", author: "AI" },
+            { text: "Eigenlijk is Utrecht gewoon een Amsterdam-light zonder ambitie.", author: "AI" },
+            { text: "Soms denk ik dat Limburg eigenlijk een Duits vakantiepark is dat te ver uit de hand gelopen is.", author: "AI" },
+            { text: "Het is logisch dat je sneller verliefd wordt in Flevoland, want er is toch niks anders te doen.", author: "AI" },
+            { text: "Een kapsalon is culinair erfgoed en zou in de UNESCO-lijst moeten komen.", author: "AI" },
+            { text: "Als je een theorie-examen haalt zonder te gokken, ben je een robot.", author: "AI" },
+            { text: "Elke appgroep is eigenlijk gewoon een archief van gemiste inside jokes.", author: "AI" },
+            { text: "AH Bonuskaart is een loyalty-scam", author: "AI" },
+            { text: "Wie heeft überhaupt bedacht dat een bananenbrood geen brood maar cake is", author: "AI" },
+            { text: "Broer mijn wekker ging niet af, maar m’n stress heeft me wel wakker gemaakt", author: "AI" },
+            { text: "Een luchtbed is gewoon een broodrooster voor je rug", author: "AI" },
+            { text: "Waarom zijn powerbanks niet gewoon standaard ingebouwd in telefoons", author: "AI" },
+            { text: "Wie noemt zijn kind nou Horst, dat klinkt als een bouwmarkt", author: "AI" },
+            { text: "Soms denk ik dat wifi gewoon placebo is", author: "AI" },
+            { text: "Broer, een smoothie is letterlijk fruit dat je mishandeld hebt", author: "AI" },
+            { text: "Elk voetbalstadion is gewoon een mega asbak met stoeltjes", author: "AI" },
+            { text: "Waarom is de prullenbak op m’n laptop een icoon en niet gewoon een zak van Albert Heijn", author: "AI" },
+            { text: "Stel je voor je moet belastingaangifte doen", author: "AI" },
+            { text: "Wie heeft besloten dat een muis een computer accessoire en een dier mag zijn", author: "AI" },
+            { text: "Snapchat herinneringen zijn legale chantage tegen jezelf", author: "AI" },
+            { text: "Marco Borsato heeft wel tactisch gekozen om te verdwijnen", author: "AI" },
+            { text: "Broer, ik zweer als ik nog één keer zo’n motivational LinkedIn post zie ga ik emigreren", author: "AI" },
+            { text: "Je bedoelt dat land dat basically één grote Rabobank vestiging is?", author: "AI" },
+            { text: "Ik dacht dat Liechtenstein gewoon een skipiste met een vlag was", author: "AI" },
+            { text: "Als je echt deep gaat, is kaas gewoon melk dat trauma heeft verwerkt", author: "AI" },
+            { text: "Het idee dat je een “vrijmibo” kan hebben als je niet eens werk hebt is wel sick ironisch", author: "AI" },
+            { text: "ik kreeg ineens een pushmelding dat ik vandaag 0 stappen heb gezet", author: "AI" },
+            { text: "Dat is gewoon high score gedrag", author: "AI" },
+            { text: "Een stoel in elkaar zetten met IKEA handleiding is net zoiets als The Da Vinci Code lezen, maar dan slechter geschreven", author: "AI" },
+            { text: "Ik dacht serieus dat je zonnepanelen ook kon laten staan in de schaduw en dat ze dan gewoon chill elektriciteit maken", author: "AI" },
+            { text: "Broodroosters zijn letterlijk guillotines maar dan voor graan", author: "AI" },
+            { text: "Als de politiek echt eerlijk zou zijn zouden ze gewoon een Twitch stream starten met beleid in de chat laten voten", author: "AI" },
+            { text: "Als je je rijbewijs haalt in Lelystad zou dat ongeldig moeten zijn buiten Flevoland", author: "AI" }
+
+        ];
+
+        // Combine all messages and add a source property
+        const allMessages = [
+            ...blokhut5Messages.map(m => ({ ...m, source: "blokhut5" })),
+            ...aiMessages.map(m => ({ ...m, source: "ai", date: null })),
+        ];
+
+        let state = {
+            score: 0,
+            gameOver: false,
+            currentMessage: null,
+            showResult: false,
+            lastResult: null,
+            started: false,
+            copiedMessage: '',
+            seenMessages: new Set(),
+            showWrongResult: false,
+            lastWrongResult: null
+        };
+
+        const appDiv = document.getElementById('app');
+
+        function render() {
+            // Render the initial screen before the game starts
+            if (!state.started) {
+                appDiv.innerHTML = `
+                    <div class="flex flex-col items-center justify-center min-h-screen gap-6 bg-blue-900 text-white p-6 text-center">
+                        <h1 class="text-4xl font-bold rounded-lg p-2">Blokhut5 of AI?</h1>
+                        <p class="text-lg max-w-xl">
+                            Raad of het bericht afkomstig is van iemand uit Blokhut5 of door AI is gegenereerd.
+                            Elk goed antwoord levert je een punt op, maar één fout en het spel is voorbij!
+                        </p>
+                        <button id="startButton" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded-full transition-colors duration-300 button-shadow">
+                            Start
+                        </button>
+                    </div>
+                `;
+                document.getElementById('startButton').addEventListener('click', () => {
+                    state.started = true;
+                    state.currentMessage = getRandomMessage();
+                    render();
+                });
+                return;
+            }
+            
+            // Render the wrong result screen before game over
+            if (state.showWrongResult) {
+                const sourceText = state.lastWrongResult.source === "ai" ? "AI" : "Blokhut5";
+                const dateText = state.lastWrongResult.date ? `, ${state.lastWrongResult.date}` : "";
+                appDiv.innerHTML = `
+                    <div class="flex flex-col items-center justify-center min-h-screen gap-4 bg-red-200 text-red-800 transition-opacity duration-500 opacity-100 p-6 text-center">
+                        <h1 class="text-3xl font-bold">Fout!</h1>
+                        <p class="text-xl">Dit bericht was van <span class="font-semibold">${state.lastWrongResult.author}</span> (${sourceText}${dateText})</p>
+                        <button id="continueButton" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-full transition-colors duration-300 button-shadow mt-4">
+                            Verder
+                        </button>
+                    </div>
+                `;
+                document.getElementById('continueButton').addEventListener('click', () => {
+                    state.showWrongResult = false;
+                    state.gameOver = true;
+                    render();
+                });
+                return;
+            }
+
+            // Render the game over screen
+            if (state.gameOver) {
+                appDiv.innerHTML = `
+                    <div class="flex flex-col items-center justify-center min-h-screen gap-6 bg-blue-900 text-white p-6 text-center">
+                        <h1 class="text-4xl font-bold">Game Over!</h1>
+                        <p class="text-2xl mt-4">Jouw score: <span class="font-bold">${state.score}</span></p>
+                        ${state.copiedMessage ? `<div class="bg-green-600 text-white px-4 py-2 rounded-lg mt-4 animate-fade-in-out">${state.copiedMessage}</div>` : ''}
+                        <div class="flex flex-col sm:flex-row gap-4 mt-8">
+                            <button id="shareButton" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-full transition-colors duration-300 button-shadow">
+                                Deel Score
+                            </button>
+                            <button id="restartButton" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-full transition-colors duration-300 button-shadow">
+                                Probeer opnieuw
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('shareButton').addEventListener('click', handleShare);
+                document.getElementById('restartButton').addEventListener('click', handleRestart);
+                return;
+            }
+
+            // Render the result screen after a correct guess
+            if (state.showResult) {
+                const sourceText = state.lastResult.source === "ai" ? "AI" : "Blokhut5";
+                const dateText = state.lastResult.date ? `, ${state.lastResult.date}` : "";
+                appDiv.innerHTML = `
+                    <div class="flex flex-col items-center justify-center min-h-screen gap-4 bg-green-200 text-green-800 transition-opacity duration-500 opacity-100 p-6 text-center">
+                        <h1 class="text-3xl font-bold">Correct!</h1>
+                        <p class="text-xl">Dit bericht was van <span class="font-semibold">${state.lastResult.author}</span> (${sourceText}${dateText})</p>
+                    </div>
+                `;
+                setTimeout(() => {
+                    state.showResult = false;
+                    state.currentMessage = getRandomMessage();
+                    render();
+                }, 2000);
+                return;
+            }
+
+            // Render the main game screen
+            appDiv.innerHTML = `
+                <div class="flex flex-col items-center justify-center gap-10 p-6 w-full">
+                    <h1 class="text-3xl font-semibold">Score: ${state.score}</h1>
+                    <div class="message-card">
+                        <p class="text-2xl text-center font-medium leading-relaxed">“${state.currentMessage.text}”</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-6 mt-8">
+                        <button id="blokhut5Button" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-4 px-8 rounded-full transition-colors duration-300 button-shadow">
+                            Blokhut5
+                        </button>
+                        <button id="aiButton" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-4 px-8 rounded-full transition-colors duration-300 button-shadow">
+                            AI
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('blokhut5Button').addEventListener('click', () => handleGuess('blokhut5'));
+            document.getElementById('aiButton').addEventListener('click', () => handleGuess('ai'));
+        }
+
+        // Function to get a random message from the combined dataset that hasn't been seen yet
+        function getRandomMessage() {
+            const unseenMessages = allMessages.filter(m => !state.seenMessages.has(m));
+            
+            // If all messages have been seen, reset the set to allow a new game run
+            if (unseenMessages.length === 0) {
+                state.seenMessages.clear();
+                return getRandomMessage(); // Recursively call to get a message from the newly reset pool
+            }
+            
+            const randomIndex = Math.floor(Math.random() * unseenMessages.length);
+            const selectedMessage = unseenMessages[randomIndex];
+            state.seenMessages.add(selectedMessage);
+            
+            return selectedMessage;
+        }
+
+        // Handle a user's guess
+        function handleGuess(guess) {
+            if (guess === state.currentMessage.source) {
+                state.score++;
+                state.lastResult = state.currentMessage;
+                state.showResult = true;
+                render();
+            } else {
+                state.lastWrongResult = state.currentMessage;
+                state.showWrongResult = true;
+                render();
+            }
+        }
+
+        // Reset the game
+        function handleRestart() {
+            state.score = 0;
+            state.gameOver = false;
+            state.started = true;
+            state.seenMessages.clear(); // Clear seen messages on restart
+            state.currentMessage = getRandomMessage();
+            render();
+        }
+
+        // Share the score by copying it to the clipboard
+        function handleShare() {
+            const textToCopy = `Blokhut5 of AI - score: ${state.score}`;
+            
+            // Fallback for clipboard operations in iframes
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            state.copiedMessage = 'Naar het klembord gekopieerd!';
+            render();
+            setTimeout(() => {
+                state.copiedMessage = '';
+                render();
+            }, 2000);
+        }
+
+        // Initial render
+        window.onload = render;
+    </script>
+</body>
+</html>
